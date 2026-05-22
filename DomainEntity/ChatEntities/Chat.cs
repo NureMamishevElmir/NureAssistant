@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using DomainEntity.BaseEnitiy;
+using DomainEntity.CustomerEntities;
+
+namespace DomainEntity.ChatEntities;
+
+public class Chat : BaseEntity
+{
+    public required string Name { get; set; }
+
+    [ForeignKey(nameof(Customer))]
+    public Guid CustomerId { get; set; }
+
+    [JsonIgnore]
+    public virtual Customer Customer { get; set; }
+}
