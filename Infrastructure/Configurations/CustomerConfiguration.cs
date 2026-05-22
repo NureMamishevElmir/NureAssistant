@@ -17,11 +17,5 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(c => c.Email).HasMaxLength(256);
         builder.Property(c => c.Name).HasMaxLength(256);
         builder.Property(c => c.Phone).HasMaxLength(32);
-
-        // Інші агрегати не входять у схему автентифікації.
-        builder.Ignore(c => c.AIs);
-        builder.Ignore(c => c.Files);
-        builder.Ignore(c => c.Chats);
-        builder.Ignore(c => c.Messages);
     }
 }
