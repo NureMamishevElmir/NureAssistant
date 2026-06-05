@@ -1,6 +1,5 @@
+using DomainEntity.Request;
 using Identity.Exceptions;
-using Identity.Models.Requests;
-using Identity.Models.Responses;
 using Identity.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,17 +17,16 @@ public class CustomerAuthController : ControllerBase
         _authService = authService;
     }
 
-    /// <summary>Реєстрація нового користувача.</summary>
     [AllowAnonymous]
     [HttpPost]
-    [ProducesResponseType(typeof(SignInResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<SignInResponse>> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterAsync([FromBody] CustomerRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var response = await _authService.RegisterAsync(request, cancellationToken);
-            return Ok(response);
+            var (token, validTo, customer) = await _authService.RegisterAsync(request, cancellationToken);
+            return Ok(new { token, validTo, customer });
         }
         catch (AuthException ex)
         {
@@ -36,17 +34,16 @@ public class CustomerAuthController : ControllerBase
         }
     }
 
-    /// <summary>Вхід користувача.</summary>
     [AllowAnonymous]
     [HttpPost]
-    [ProducesResponseType(typeof(SignInResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<SignInResponse>> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> LoginAsync([FromBody] CustomerRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var response = await _authService.LoginAsync(request, cancellationToken);
-            return Ok(response);
+            var (token, validTo, customer) = await _authService.LoginAsync(request, cancellationToken);
+            return Ok(new { token, validTo, customer });
         }
         catch (AuthException ex)
         {

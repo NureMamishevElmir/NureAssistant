@@ -11,10 +11,10 @@ public class Message : BaseEntity
     public required string Text { get; set; }
 
     [ForeignKey(nameof(Customer))]
-    public Guid CustomerId { get; set; }
+    public Guid? CustomerId { get; set; }
 
     [JsonIgnore]
-    public virtual Customer Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
 
     [ForeignKey(nameof(Chat))]
     public Guid ChatId { get; set; }
@@ -23,8 +23,8 @@ public class Message : BaseEntity
     public virtual Chat Chat { get; set; }
 
     [ForeignKey(nameof(AIFile))]
-    public Guid FileId { get; set; }
+    public Guid? FileId { get; set; }
 
     [JsonIgnore]
-    public virtual AIFile File { get; set; }
+    public virtual AIFile? File { get; set; }
 }

@@ -11,7 +11,6 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.ToTable("Customers");
         builder.HasKey(c => c.Id);
 
-        // Email використовується як логін, тому має бути унікальним.
         builder.HasIndex(c => c.Email).IsUnique();
 
         builder.Property(c => c.Email).HasMaxLength(256);

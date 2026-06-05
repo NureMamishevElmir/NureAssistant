@@ -1,14 +1,11 @@
-using Identity.Models.Requests;
-using Identity.Models.Responses;
+using DomainEntity.Exchange;
+using DomainEntity.Request;
 
 namespace Identity.Services;
 
-/// <summary>Реєстрація та вхід користувачів.</summary>
 public interface IAuthService
 {
-    /// <summary>Реєструє нового користувача та одразу видає токен.</summary>
-    Task<SignInResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
+    Task<(string Token, DateTime ValidTo, CustomerExchange Customer)> RegisterAsync(CustomerRequest request, CancellationToken cancellationToken = default);
 
-    /// <summary>Перевіряє облікові дані та видає токен.</summary>
-    Task<SignInResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default);
+    Task<(string Token, DateTime ValidTo, CustomerExchange Customer)> LoginAsync(CustomerRequest request, CancellationToken cancellationToken = default);
 }

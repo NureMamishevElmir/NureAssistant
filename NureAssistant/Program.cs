@@ -1,4 +1,5 @@
 using System.Text;
+using AIIntegration.DI;
 using Identity.Configuration;
 using Identity.DI;
 using Infrastructure;
@@ -7,19 +8,21 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NureAssistant.Services;
 using Repository.DI;
+using Service.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-// Шари: Infrastructure (БД) -> Repository -> Service (Identity).
 builder.Services.ConfigureInfrastructureDI(builder.Configuration);
 builder.Services.ConfigureRepositoryDI();
-builder.Services.ConfigureServiceDI(builder.Configuration);
+builder.Services.ConfigureIdentityDI(builder.Configuration);
+builder.Services.ConfigureServiceDI();
+builder.Services.ConfigureAIIntegrationDI(builder.Configuration);
+builder.Services.AddScoped<IAskGraphService, AskGraphService>();
 
-// Налаштування перевірки JWT-токенів (Bearer).
 var jwtSettings = builder.Configuration.GetSection("JwtTokenSettings").Get<JwtTokenSettings>()
                   ?? throw new InvalidOperationException("Відсутня секція JwtTokenSettings в конфігурації.");
 
@@ -41,13 +44,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(swagger =>
 {
     swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "NureAssistant API", Version = "v1" });
 
-    // Дозволяємо вводити JWT-токен у Swagger UI.
     swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -71,14 +72,12 @@ builder.Services.AddSwaggerGen(swagger =>
 
 var app = builder.Build();
 
-// Застосовуємо міграції при старті, щоб таблиці існували.
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

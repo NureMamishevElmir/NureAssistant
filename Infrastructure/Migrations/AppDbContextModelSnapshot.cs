@@ -90,6 +90,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AIFileId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
@@ -100,6 +103,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AIFileId");
+
+                    b.HasIndex("ChatId");
 
                     b.ToTable("AIFileChats");
                 });
@@ -142,10 +149,10 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("FileId")
+                    b.Property<Guid?>("FileId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
@@ -273,6 +280,25 @@ namespace Infrastructure.Migrations
                     b.Navigation("File");
                 });
 
+            modelBuilder.Entity("DomainEntity.AIEntities.AIFileChat", b =>
+                {
+                    b.HasOne("DomainEntity.AIEntities.AIFile", "AIFile")
+                        .WithMany()
+                        .HasForeignKey("AIFileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DomainEntity.ChatEntities.Chat", "Chat")
+                        .WithMany()
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AIFile");
+
+                    b.Navigation("Chat");
+                });
+
             modelBuilder.Entity("DomainEntity.ChatEntities.Chat", b =>
                 {
                     b.HasOne("DomainEntity.CustomerEntities.Customer", "Customer")
@@ -294,15 +320,11 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("DomainEntity.CustomerEntities.Customer", "Customer")
                         .WithMany("Messages")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("DomainEntity.AIEntities.AIFile", "File")
                         .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FileId");
 
                     b.Navigation("Chat");
 

@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.Services.Impl;
 
-/// <inheritdoc cref="ITokenService"/>
 public class TokenService : ITokenService
 {
     private readonly JwtTokenSettings _settings;

@@ -10,11 +10,7 @@ namespace Identity.DI;
 
 public static class DIRegister
 {
-    /// <summary>
-    /// Реєструє сервісний шар автентифікації: налаштування JWT, хешер паролів,
-    /// сервіс токенів та сервіс реєстрації/входу.
-    /// </summary>
-    public static IServiceCollection ConfigureServiceDI(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureIdentityDI(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<JwtTokenSettings>(configuration.GetSection("JwtTokenSettings"));
 
