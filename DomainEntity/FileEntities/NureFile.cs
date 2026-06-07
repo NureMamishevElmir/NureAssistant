@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using DomainEntity.AIEntities;
 using DomainEntity.BaseEnitiy;
 using DomainEntity.CustomerEntities;
 
@@ -16,6 +17,12 @@ public class NureFile : BaseEntity
     public DateTime ActivatedAt { get; set; }
 
     public DateTime DeactivatedAt { get; set; }
+
+    [ForeignKey(nameof(AI))]
+    public Guid? AIId { get; set; }
+
+    [JsonIgnore]
+    public virtual AI? AI { get; set; }
 
     [ForeignKey(nameof(Customer))]
     public Guid CustomerId { get; set; }

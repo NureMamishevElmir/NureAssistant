@@ -23,9 +23,6 @@ public class AutoMapperServiceProfile : Profile
         CreateMap<AIRequest, AI>();
         CreateMap<AI, AIExchange>();
 
-        CreateMap<AIFileRequest, AIFile>();
-        CreateMap<AIFile, AIFileExchange>();
-
         CreateMap<AIFileChatRequest, AIFileChat>();
         CreateMap<AIFileChat, AIFileChatExchange>();
 

@@ -6,7 +6,7 @@ public class AIFileChatExchange
 
     public Guid ChatId { get; set; }
 
-    public Guid AIFileId { get; set; }
+    public Guid FileId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

@@ -10,7 +10,6 @@ public static class DIRegister
     {
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IAIRepository, AIRepository>();
-        services.AddScoped<IAIFileRepository, AIFileRepository>();
         services.AddScoped<IAIFileChatRepository, AIFileChatRepository>();
         services.AddScoped<IChatRepository, ChatRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();

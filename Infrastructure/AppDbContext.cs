@@ -15,8 +15,6 @@ public class AppDbContext : DbContext
 
     public DbSet<AI> AIs { get; set; }
 
-    public DbSet<AIFile> AIFiles { get; set; }
-
     public DbSet<AIFileChat> AIFileChats { get; set; }
 
     public DbSet<Chat> Chats { get; set; }
@@ -30,7 +28,6 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CustomerConfiguration());
 
         modelBuilder.Entity<AI>().HasKey(_ => _.Id);
-        modelBuilder.Entity<AIFile>().HasKey(_ => _.Id);
         modelBuilder.Entity<AIFileChat>().HasKey(_ => _.Id);
         modelBuilder.Entity<Chat>().HasKey(_ => _.Id);
         modelBuilder.Entity<Message>().HasKey(_ => _.Id);

@@ -14,18 +14,15 @@ public class AskGraphService : IAskGraphService
 {
     private readonly IAIRepository _aiRepository;
     private readonly INureFileRepository _fileRepository;
-    private readonly IAIFileRepository _aiFileRepository;
     private readonly IAIFileChatRepository _aiFileChatRepository;
 
     public AskGraphService(
         IAIRepository aiRepository,
         INureFileRepository fileRepository,
-        IAIFileRepository aiFileRepository,
         IAIFileChatRepository aiFileChatRepository)
     {
         _aiRepository = aiRepository;
         _fileRepository = fileRepository;
-        _aiFileRepository = aiFileRepository;
         _aiFileChatRepository = aiFileChatRepository;
     }
 
@@ -69,29 +66,27 @@ public class AskGraphService : IAskGraphService
                 Weight = "0",
                 IsActive = true,
                 ActivatedAt = now,
+                AIId = ai.Id,
                 CustomerId = request.CustomerId,
             };
             await _fileRepository.AddAsync(file, cancellationToken);
             await _fileRepository.SaveChangesAsync(cancellationToken);
         }
-
-        var aiFile = await _aiFileRepository.FirstOrDefaultAsync(
-            af => af.AIId == ai.Id && af.FileId == file.Id, cancellationToken);
-        if (aiFile is null)
+        else if (file.AIId != ai.Id)
         {
-            aiFile = new AIFile { AIId = ai.Id, FileId = file.Id };
-            await _aiFileRepository.AddAsync(aiFile, cancellationToken);
-            await _aiFileRepository.SaveChangesAsync(cancellationToken);
+            file.AIId = ai.Id;
+            _fileRepository.Update(file);
+            await _fileRepository.SaveChangesAsync(cancellationToken);
         }
 
         if (request.ChatId != Guid.Empty)
         {
             var chatLink = await _aiFileChatRepository.FirstOrDefaultAsync(
-                c => c.ChatId == request.ChatId && c.AIFileId == aiFile.Id, cancellationToken);
+                c => c.ChatId == request.ChatId && c.FileId == file.Id, cancellationToken);
             if (chatLink is null)
             {
                 await _aiFileChatRepository.AddAsync(
-                    new AIFileChat { ChatId = request.ChatId, AIFileId = aiFile.Id }, cancellationToken);
+                    new AIFileChat { ChatId = request.ChatId, FileId = file.Id }, cancellationToken);
                 await _aiFileChatRepository.SaveChangesAsync(cancellationToken);
             }
         }

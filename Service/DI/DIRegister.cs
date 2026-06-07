@@ -13,7 +13,6 @@ public static class DIRegister
     {
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IAIService, AIService>();
-        services.AddScoped<IAIFileService, AIFileService>();
         services.AddScoped<IAIFileChatService, AIFileChatService>();
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IMessageService, MessageService>();

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using DomainEntity.AIEntities;
 using DomainEntity.BaseEnitiy;
 using DomainEntity.CustomerEntities;
+using DomainEntity.FileEntities;
 
 namespace DomainEntity.ChatEntities;
 
@@ -22,9 +22,9 @@ public class Message : BaseEntity
     [JsonIgnore]
     public virtual Chat Chat { get; set; }
 
-    [ForeignKey(nameof(AIFile))]
+    [ForeignKey(nameof(File))]
     public Guid? FileId { get; set; }
 
     [JsonIgnore]
-    public virtual AIFile? File { get; set; }
+    public virtual NureFile? File { get; set; }
 }
